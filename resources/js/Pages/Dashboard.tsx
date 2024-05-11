@@ -7,11 +7,16 @@ import {
 } from "@/Components/ui/resizable";
 import UserAvatar from "@/Components/UserAvatar";
 import PrimaryButton from "@/Components/PrimaryButton";
-import { Plus } from "lucide-react";
+import { Plus, SaveAll } from "lucide-react";
 import MarkDownEditor from "@/Components/Markdown";
+import useRichText from "@/hooks/useRichText";
 
 export default function Dashboard({ auth }: PageProps) {
     const { user } = auth;
+    const { note, updateNote } = useRichText();
+
+    const saveNote = () => console.log(note);
+
     return (
         <>
             <Head title="Dashboard" />
@@ -37,7 +42,16 @@ export default function Dashboard({ auth }: PageProps) {
                 </ResizablePanel>
                 <ResizableHandle withHandle />
                 <ResizablePanel>
-                    <MarkDownEditor />
+                    <MarkDownEditor note={note} updateNote={updateNote} />
+                    <div className="px-12 flex">
+                        <PrimaryButton
+                            className="ml-auto px-2 flex gap-x-3"
+                            onClick={saveNote}
+                        >
+                            <SaveAll />
+                            Save
+                        </PrimaryButton>
+                    </div>
                 </ResizablePanel>
             </ResizablePanelGroup>
         </>

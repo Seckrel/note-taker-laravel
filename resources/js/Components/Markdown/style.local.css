@@ -1,3 +1,7 @@
+.codex-editor {
+    padding-top: 3rem;
+}
+
 .ce-toolbar__content,
 .ce-block__content {
     max-width: unset;
@@ -48,4 +52,42 @@
 .ce-toolbar--opened {
     padding-left: 4rem;
     padding-right: 4rem;
+}
+
+.cdx-search-field__input {
+    color: black;
+}
+.cdx-warning::before {
+    background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='5' y='5' width='14' height='14' rx='4' stroke='white' stroke-width='2'/%3E%3Cline x1='12' y1='9' x2='12' y2='12' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3Cpath d='M12 15.02V15.01' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") !important;
+}
+
+.tc-popover__item-icon > svg,
+.tc-popover__item-label {
+    color: black;
+}
+.tc-cell--selected,
+.tc-row--selected,
+.tc-add-column:hover,
+.tc-add-row:hover {
+    background: #656b7c !important;
+}
+.ce-code__textarea {
+    background-color: #111827 !important;
+    border: none !important;
+    color: #48ff36c7 !important;
+}
+.cdx-button {
+    background: #1f2937 !important;
+}
+/* Headings Typography */
+h1 {
+    font-size: 3rem;
+}
+
+h2 {
+    font-size: 2.5rem;
+}
+
+h3 {
+    font-size: 2rem;
 }

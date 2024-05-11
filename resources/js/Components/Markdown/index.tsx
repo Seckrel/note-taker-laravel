@@ -1,37 +1,25 @@
-import EditorJS from "@editorjs/editorjs";
-import Header from "editorjs-header-with-anchor";
-import NestedList from "@editorjs/nested-list";
-import Quote from "@editorjs/quote";
-import InlineCode from "@editorjs/inline-code";
-import editorjsCodecup from "@calumk/editorjs-codecup";
 import "./style.local.css";
+import { createReactEditorJS } from "react-editor-js";
+import { EDITOR_JS_TOOLS } from "./constant";
+import { PropsWithChildren } from "react";
+import { OutputData, API } from "@editorjs/editorjs";
 
-export default function MarkDownEditor() {
-    const editor = new EditorJS({
-        holder: "note-editor",
-        autofocus: true,
-        tools: {
-            header: {
-                class: Header,
-            },
-            list: {
-                class: NestedList,
-                inlineToolbar: true,
-                config: {
-                    defaultStyle: "ordered",
-                },
-            },
-            quote: {
-                class: Quote,
-                inlineToolbar: true,
-                shortcut: "CMD+SHIFT+O",
-            },
-            code: editorjsCodecup,
-            inlineCode: {
-                class: InlineCode,
-            },
-        },
-    });
+const ReactEditorJS = createReactEditorJS();
 
-    return <div id="note-editor" className="mt-11"></div>;
+export default function MarkDownEditor({
+    note,
+    updateNote,
+}: PropsWithChildren<{
+    note: OutputData;
+    updateNote: (api: API) => Promise<void>;
+}>) {
+    // const { note, updateNote } = useRichText();
+    return (
+        <ReactEditorJS
+            onChange={updateNote}
+            // @ts-ignore
+            tools={EDITOR_JS_TOOLS}
+            defaultValue={note}
+        />
+    );
 }

@@ -1,4 +1,3 @@
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 import { PageProps } from "@/types";
 import {
@@ -9,6 +8,7 @@ import {
 import UserAvatar from "@/Components/UserAvatar";
 import PrimaryButton from "@/Components/PrimaryButton";
 import { Plus } from "lucide-react";
+import MarkDownEditor from "@/Components/Markdown";
 
 export default function Dashboard({ auth }: PageProps) {
     const { user } = auth;
@@ -36,7 +36,9 @@ export default function Dashboard({ auth }: PageProps) {
                     </div>
                 </ResizablePanel>
                 <ResizableHandle withHandle />
-                <ResizablePanel>Two</ResizablePanel>
+                <ResizablePanel>
+                    <MarkDownEditor />
+                </ResizablePanel>
             </ResizablePanelGroup>
         </>
     );

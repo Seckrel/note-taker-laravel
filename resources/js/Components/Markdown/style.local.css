@@ -1,0 +1,51 @@
+.ce-toolbar__content,
+.ce-block__content {
+    max-width: unset;
+    width: 92% !important;
+    color: white;
+}
+.ce-block--selected .ce-block__content {
+    background-color: inherit;
+}
+.ce-paragraph,
+.cdx-block {
+    background-color: rgb(31 41 55 / var(--tw-bg-opacity));
+    border-radius: 10px 10px 10px 10px;
+    -webkit-border-radius: 10px 10px 10px 10px;
+    -moz-border-radius: 10px 10px 10px 10px;
+    box-shadow: -1px 3px 4px -3px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: -1px 3px 4px -3px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: -1px 3px 4px -3px rgba(0, 0, 0, 0.75);
+    min-height: 55px;
+    font-size: 1.5rem;
+    padding-left: 2rem;
+    padding-right: 1rem;
+    letter-spacing: 0.1rem;
+}
+
+.ce-block {
+    padding-bottom: 22px !important;
+}
+
+.ce-toolbar__plus,
+.ce-toolbar__settings-btn {
+    color: black;
+    background-color: white;
+    width: 40px;
+    height: 40px;
+}
+
+.ce-toolbar__plus:hover,
+.ce-toolbar__settings-btn:hover {
+    background-color: white;
+}
+
+.ce-block__content {
+    width: 81% !important;
+}
+
+.ce-toolbar,
+.ce-toolbar--opened {
+    padding-left: 4rem;
+    padding-right: 4rem;
+}

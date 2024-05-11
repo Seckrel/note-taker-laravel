@@ -43,6 +43,8 @@ class NoteController extends Controller
                 'note' => $note,
             ], 201);
         } catch (\Exception $e) {
+            error_log($e);
+
             return response(['message' => $e->getMessage()], 400);
         }
     }

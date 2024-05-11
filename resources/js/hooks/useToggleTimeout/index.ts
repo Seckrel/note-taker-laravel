@@ -7,12 +7,14 @@ const useToggleTimeout = (
     const [value, setValue] = useState(initialValue);
 
     useEffect(() => {
+        console.log("ue 2");
         if (initialValue) {
             setValue(true);
         }
     }, [initialValue]);
 
     useEffect(() => {
+        console.log("ue 3");
         let timer: NodeJS.Timeout | undefined;
         if (value) {
             timer = setTimeout(() => {
@@ -22,7 +24,7 @@ const useToggleTimeout = (
 
         // Clean up the timer when the component unmounts or the value changes
         return () => clearTimeout(timer);
-    }, [timeoutDuration]); // Re-run the effect if initialValue or timeoutDuration changes
+    }, [timeoutDuration, value]); // Re-run the effect if initialValue or timeoutDuration changes
 
     return value;
 };

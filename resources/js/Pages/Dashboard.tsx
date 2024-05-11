@@ -1,22 +1,43 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
-import { PageProps } from '@/types';
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { Head } from "@inertiajs/react";
+import { PageProps } from "@/types";
+import {
+    ResizableHandle,
+    ResizablePanel,
+    ResizablePanelGroup,
+} from "@/Components/ui/resizable";
+import UserAvatar from "@/Components/UserAvatar";
+import PrimaryButton from "@/Components/PrimaryButton";
+import { Plus } from "lucide-react";
 
 export default function Dashboard({ auth }: PageProps) {
+    const { user } = auth;
     return (
-        <AuthenticatedLayout
-            user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Dashboard</h2>}
-        >
+        <>
             <Head title="Dashboard" />
 
-            <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900 dark:text-gray-100">You're logged in!</div>
+            <ResizablePanelGroup
+                className="min-h-screen bg-gray-100 dark:bg-gray-900"
+                direction="horizontal"
+            >
+                <ResizablePanel
+                    defaultSize={17}
+                    minSize={17}
+                    maxSize={20}
+                    className="dark:bg-gray-800"
+                >
+                    <UserAvatar user={user} />
+                    <div className="w-full dark:bg-gray-700 h-[1px]" />
+                    <div className="flex flex-col justify-center px-11 mt-8">
+                        <PrimaryButton className="px-2 flex gap-x-3">
+                            <Plus />
+                            New Note
+                        </PrimaryButton>
                     </div>
-                </div>
-            </div>
-        </AuthenticatedLayout>
+                </ResizablePanel>
+                <ResizableHandle withHandle />
+                <ResizablePanel>Two</ResizablePanel>
+            </ResizablePanelGroup>
+        </>
     );
 }

@@ -10,8 +10,9 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import { Plus, SaveAll } from "lucide-react";
 import MarkDownEditor from "@/Components/Markdown";
 import useRichText from "@/hooks/useRichText";
+import ListNote from "@/Components/ListNotes";
 
-export default function Dashboard({ auth }: PageProps) {
+export default function Dashboard({ auth, notes }: PageProps) {
     const { user } = auth;
     const { note, updateNote } = useRichText();
 
@@ -33,11 +34,12 @@ export default function Dashboard({ auth }: PageProps) {
                 >
                     <UserAvatar user={user} />
                     <div className="w-full dark:bg-gray-700 h-[1px]" />
-                    <div className="flex flex-col justify-center px-11 mt-8">
+                    <div className="flex flex-col justify-center px-11 mt-8 gap-y-8">
                         <PrimaryButton className="px-2 flex gap-x-3">
                             <Plus />
                             New Note
                         </PrimaryButton>
+                        <ListNote notes={notes} />
                     </div>
                 </ResizablePanel>
                 <ResizableHandle withHandle />

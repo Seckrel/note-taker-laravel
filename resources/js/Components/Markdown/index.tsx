@@ -1,6 +1,9 @@
 import EditorJS from "@editorjs/editorjs";
-import Header from "@editorjs/header";
-import List from "@editorjs/list";
+import Header from "editorjs-header-with-anchor";
+import NestedList from "@editorjs/nested-list";
+import Quote from "@editorjs/quote";
+import InlineCode from "@editorjs/inline-code";
+import editorjsCodecup from "@calumk/editorjs-codecup";
 import "./style.local.css";
 
 export default function MarkDownEditor() {
@@ -8,13 +11,24 @@ export default function MarkDownEditor() {
         holder: "note-editor",
         autofocus: true,
         tools: {
-            header: Header,
+            header: {
+                class: Header,
+            },
             list: {
-                class: List,
+                class: NestedList,
                 inlineToolbar: true,
                 config: {
-                    defaultStyle: "unordered",
+                    defaultStyle: "ordered",
                 },
+            },
+            quote: {
+                class: Quote,
+                inlineToolbar: true,
+                shortcut: "CMD+SHIFT+O",
+            },
+            code: editorjsCodecup,
+            inlineCode: {
+                class: InlineCode,
             },
         },
     });

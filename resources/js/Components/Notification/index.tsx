@@ -2,7 +2,7 @@
 
 import { CircleCheck, X } from "lucide-react";
 import { createPortal } from "react-dom";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import "./style.local.css";
 import useToggleTimeout from "@/hooks/useToggleTimeout";
@@ -10,30 +10,41 @@ import useToggleTimeout from "@/hooks/useToggleTimeout";
 export default function Notification({
     msg,
     status,
+    open,
+    onClose,
 }: {
     msg: string;
     status: number | undefined;
+    open: boolean;
+    onClose: () => void;
 }) {
-    if (!status) {
+    if (!(status || open)) {
+        onClose();
         return null;
     }
-    const toggleNotification = useToggleTimeout();
-    const positiveStatus = useMemo(() => status >= 200 && status < 300, []);
+
+    const toggleNotification = useToggleTimeout(open);
+    const positiveStatus = useMemo(() => status! >= 200 && status! < 300, []);
+    useEffect(() => {
+        if (!toggleNotification) {
+            onClose();
+        }
+    }, [toggleNotification]);
     const NotificationMsg = () => (
         <div
             style={{
                 background: positiveStatus ? "green" : "red",
             }}
             className={cn(
-                "flex gap-x-5 p-5 absolute  top-right z-50 max-h-32 max-w-80 w-80 rounded-md"
+                "flex gap-x-5 p-5 absolute top-right z-50 min-h-32 max-w-80 w-80 rounded-md"
             )}
         >
             {positiveStatus ? (
                 <CircleCheck size={55} />
             ) : (
-                <X size={55} color="red" />
+                <X size={55} color="white" />
             )}
-            <span className="text-white text-2xl  block overflow-wrap--anywhere">
+            <span className="text-white text-lg  block overflow-wrap--anywhere">
                 {msg}
             </span>
         </div>

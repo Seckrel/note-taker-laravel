@@ -12,17 +12,54 @@ import MarkDownEditor from "@/Components/Markdown";
 import useRichText from "@/hooks/useRichText";
 import ListNote from "@/Components/ListNotes";
 import Notification from "@/Components/Notification";
+import { MouseEvent, useState } from "react";
+import axios, { AxiosError } from "axios";
 
 export default function Dashboard({ auth, notes }: PageProps) {
     const { user } = auth;
     const { note, updateNote } = useRichText();
+    const [response, setResponse] = useState<{
+        message: string;
+        status: number | undefined;
+    }>({
+        message: "",
+        status: undefined,
+    });
+    const [openNotification, setOpenNotification] = useState(false);
+    const handleNotificationClose = () => setOpenNotification(false);
 
-    const saveNote = () => console.log(note);
+    const saveNote = async (e: MouseEvent<HTMLElement>) => {
+        e.preventDefault();
+        try {
+            const { data, status, statusText } = await axios.post(
+                "http://localhost:8000/dashboard",
+                note
+            );
+            setResponse({
+                message: data.message,
+                status: status,
+            });
+            setOpenNotification(true);
+            if (statusText === "OK") {
+                notes += data.note;
+            }
+        } catch (err: unknown) {
+            const errors = err as Error | AxiosError;
+            if (!axios.isAxiosError(errors)) {
+            } else {
+                setResponse({
+                    message: errors.response!.data.message,
+                    status: errors.response!.status,
+                });
+            }
+
+            setOpenNotification(true);
+        }
+    };
 
     return (
         <>
             <Head title="Dashboard" />
-
             <ResizablePanelGroup
                 className="min-h-screen bg-gray-100 dark:bg-gray-900"
                 direction="horizontal"
@@ -58,8 +95,10 @@ export default function Dashboard({ auth, notes }: PageProps) {
                 </ResizablePanel>
             </ResizablePanelGroup>
             <Notification
-                msg={"fdajslfjdslkdjflajsdfjdslkfjad slkfdslj"}
-                status={undefined}
+                open={openNotification}
+                onClose={handleNotificationClose}
+                msg={response.message}
+                status={response.status}
             />
         </>
     );

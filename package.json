@@ -48,8 +48,10 @@
         "clsx": "^2.1.1",
         "editorjs-header-with-anchor": "^2.6.0",
         "lucide-react": "^0.378.0",
+        "next-themes": "^0.3.0",
         "react-editor-js": "^2.1.0",
         "react-resizable-panels": "^2.0.19",
+        "sonner": "^1.4.41",
         "tailwind-merge": "^2.3.0",
         "tailwindcss-animate": "^1.0.7"
     }

@@ -27,7 +27,14 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = $request->user();
+        $data = [
+            'user_id' => $user->id,
+            'note' => $request->all(),
+        ];
+        $note = Note::create($data);
+
+        return response($note, 201);
     }
 
     /**

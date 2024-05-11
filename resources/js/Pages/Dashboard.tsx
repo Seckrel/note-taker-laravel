@@ -11,6 +11,7 @@ import { Plus, SaveAll } from "lucide-react";
 import MarkDownEditor from "@/Components/Markdown";
 import useRichText from "@/hooks/useRichText";
 import ListNote from "@/Components/ListNotes";
+import Notification from "@/Components/Notification";
 
 export default function Dashboard({ auth, notes }: PageProps) {
     const { user } = auth;
@@ -56,6 +57,10 @@ export default function Dashboard({ auth, notes }: PageProps) {
                     </div>
                 </ResizablePanel>
             </ResizablePanelGroup>
+            <Notification
+                msg={"fdajslfjdslkdjflajsdfjdslkfjad slkfdslj"}
+                status={undefined}
+            />
         </>
     );
 }

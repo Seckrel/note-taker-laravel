@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Note;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class NoteController extends Controller
@@ -14,12 +16,7 @@ class NoteController extends Controller
      */
     public function create(Request $request)
     {
-        $user = $request->user();
-        $notes = Note::where('user_id', $user->id)->get(['note', 'updated_at', 'id']);
 
-        return Inertia::render('Dashboard', [
-            'notes' => $notes,
-        ]);
     }
 
     /**
@@ -27,34 +24,65 @@ class NoteController extends Controller
      */
     public function store(Request $request)
     {
+        $user = $request->user();
+
         try {
-            $user = $request->user();
-            $data = [
-                'user_id' => $user->id,
-                'note' => $request->json()->all(),
+            $data = $request->all();
+            $rules = [
+                'note' => 'required|array',
+                'title' => 'required|string',
             ];
+            $validator = Validator::make($data, $rules);
+            if ($validator->passes()) {
+                $data = array_merge($validator->validated(), ['user_id' => $user->id]);
 
-            $note = Note::create($data);
+                $note = Note::create($data);
+                $notes = Note::where('user_id', $user->id)->get(['note', 'updated_at', 'id', 'title']);
 
-            error_log('here');
+                return Inertia::render('Dashboard', [
+                    'notification' => [
+                        'type' => 'success',
+                        'message' => 'Note Created Successfully',
+                        'open' => true,
+                    ],
+                    'notes' => $notes,
+                    'active_note' => $note->id,
+                ]);
+            } else {
+                //TODO Handle your error
+                throw ValidationException::withMessages($validator->errors()->all());
+            }
 
-            return response([
-                'message' => 'Note Created',
-                'note' => $note,
-            ], 201);
         } catch (\Exception $e) {
-            error_log($e);
+            $notes = Note::where('user_id', $user->id)->get(['note', 'updated_at', 'id', 'title']);
 
-            return response(['message' => $e->getMessage()], 400);
+            return Inertia::render('Dashboard', ['notification' => [
+                'type' => 'error',
+                'message' => $e->getMessage(),
+                'open' => true,
+            ],
+                'notes' => $notes,
+                'active_note' => null, ], 400);
         }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Note $note)
+    public function show(Request $request)
     {
-        //
+        $user = $request->user();
+        $notes = Note::where('user_id', $user->id)->get(['note', 'updated_at', 'id', 'title']);
+
+        return Inertia::render('Dashboard', [
+            'notification' => [
+                'type' => 'success',
+                'message' => '',
+                'open' => false,
+            ],
+            'notes' => $notes,
+            'active_note' => 5,
+        ]);
     }
 
     /**

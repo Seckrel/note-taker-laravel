@@ -1,0 +1,26 @@
+import { INote } from "@/types";
+import { OutputData } from "@editorjs/editorjs";
+import { useState, useCallback, act, useMemo } from "react";
+export function useSelectNote(
+    active_note: number | null | undefined = null,
+    notes: INote[]
+) {
+    const [active, setActive] = useState(active_note);
+
+    const activeNoteId = useMemo(() => {
+        if (!active_note) {
+            return null;
+        }
+        const note = notes?.filter((note) => note.id === active);
+        if (note?.length) {
+            return note[0].id;
+        } else {
+            return null;
+        }
+    }, [active]);
+    const changeActiveNote = useCallback((activeNoteId: number | null) => {
+        setActive(activeNoteId);
+    }, []);
+
+    return { activeNoteId, changeActiveNote };
+}

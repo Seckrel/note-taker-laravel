@@ -15,7 +15,7 @@ Route::get('/', function () {
     ]);
 })->middleware(['auth', 'verified']);
 
-Route::get('/dashboard', [NoteController::class, 'create'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [NoteController::class, 'show'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::post('/dashboard', [NoteController::class, 'store'])->middleware(['auth', 'verified'])->name('dashboard.store');
 
 Route::middleware('auth')->group(function () {

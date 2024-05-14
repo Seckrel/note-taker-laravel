@@ -1,5 +1,5 @@
 import { Head } from "@inertiajs/react";
-import { PageProps } from "@/types";
+import { INote, INotification, PageProps } from "@/types";
 import {
     ResizableHandle,
     ResizablePanel,
@@ -13,48 +13,41 @@ import useRichText from "@/hooks/useRichText";
 import ListNote from "@/Components/ListNotes";
 import Notification from "@/Components/Notification";
 import { MouseEvent, useState } from "react";
-import axios, { AxiosError } from "axios";
+import { router } from "@inertiajs/react";
+import { Separator } from "@/Components/ui/separator";
+import { useSelectNote } from "@/hooks/useSelectNote";
 
-export default function Dashboard({ auth, notes }: PageProps) {
+export default function Dashboard({
+    auth,
+    notes,
+    active_note,
+    notification,
+}: PageProps<{
+    notes: INote[];
+    active_note: number | null;
+    notification: INotification;
+}>) {
     const { user } = auth;
-    const { note, updateNote } = useRichText();
-    const [response, setResponse] = useState<{
-        message: string;
-        status: number | undefined;
-    }>({
-        message: "",
-        status: undefined,
-    });
+    const { activeNoteId, changeActiveNote } = useSelectNote(
+        active_note as number | null,
+        notes
+    );
+    const { note, updateNote } = useRichText(activeNoteId, notes);
     const [openNotification, setOpenNotification] = useState(false);
     const handleNotificationClose = () => setOpenNotification(false);
 
     const saveNote = async (e: MouseEvent<HTMLElement>) => {
         e.preventDefault();
-        try {
-            const { data, status, statusText } = await axios.post(
-                "http://localhost:8000/dashboard",
-                note
-            );
-            setResponse({
-                message: data.message,
-                status: status,
-            });
-            setOpenNotification(true);
-            if (statusText === "OK") {
-                notes += data.note;
-            }
-        } catch (err: unknown) {
-            const errors = err as Error | AxiosError;
-            if (!axios.isAxiosError(errors)) {
-            } else {
-                setResponse({
-                    message: errors.response!.data.message,
-                    status: errors.response!.status,
-                });
-            }
-
-            setOpenNotification(true);
-        }
+        router.visit("http://localhost:8000/dashboard", {
+            method: "post",
+            // @ts-ignore
+            data: note,
+            replace: true,
+            preserveState: true,
+            only: ["message", "notes", "notification"],
+            onError: (errors) => setOpenNotification(true),
+            onSuccess: (event) => setOpenNotification(true),
+        });
     };
 
     return (
@@ -73,16 +66,31 @@ export default function Dashboard({ auth, notes }: PageProps) {
                     <UserAvatar user={user} />
                     <div className="w-full dark:bg-gray-700 h-[1px]" />
                     <div className="flex flex-col justify-center px-11 mt-8 gap-y-8">
-                        <PrimaryButton className="px-2 flex gap-x-3">
+                        <PrimaryButton
+                            // onClick={() => changeActiveNote(null)}
+                            className="px-2 flex gap-x-3"
+                        >
                             <Plus />
                             New Note
                         </PrimaryButton>
-                        <ListNote notes={notes} />
+                    </div>
+                    <Separator className="mt-6" />
+                    <div className="flex flex-col justify-center px-11 mt-8 gap-y-8">
+                        <ListNote
+                            notes={notes as unknown[]}
+                            active_note={activeNoteId}
+                            changeActiveNote={changeActiveNote}
+                        />
                     </div>
                 </ResizablePanel>
                 <ResizableHandle withHandle />
                 <ResizablePanel>
-                    <MarkDownEditor note={note} updateNote={updateNote} />
+                    <MarkDownEditor
+                        activeNote={activeNoteId}
+                        changeActiveNote={changeActiveNote}
+                        note={note}
+                        updateNote={updateNote}
+                    />
                     <div className="px-12 flex">
                         <PrimaryButton
                             className="ml-auto px-2 flex gap-x-3"
@@ -97,8 +105,8 @@ export default function Dashboard({ auth, notes }: PageProps) {
             <Notification
                 open={openNotification}
                 onClose={handleNotificationClose}
-                msg={response.message}
-                status={response.status}
+                msg={notification.message}
+                type={notification.type}
             />
         </>
     );

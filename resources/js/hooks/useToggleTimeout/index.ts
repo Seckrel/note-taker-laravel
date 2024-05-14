@@ -7,14 +7,12 @@ const useToggleTimeout = (
     const [value, setValue] = useState(initialValue);
 
     useEffect(() => {
-        console.log("ue 2");
         if (initialValue) {
             setValue(true);
         }
     }, [initialValue]);
 
     useEffect(() => {
-        console.log("ue 3");
         let timer: NodeJS.Timeout | undefined;
         if (value) {
             timer = setTimeout(() => {

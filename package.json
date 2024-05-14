@@ -44,6 +44,7 @@
         "@editorjs/warning": "latest",
         "@radix-ui/react-avatar": "^1.0.4",
         "@radix-ui/react-dropdown-menu": "^2.0.6",
+        "@radix-ui/react-separator": "^1.0.3",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.1",
         "editorjs-header-with-anchor": "^2.6.0",

@@ -9,12 +9,12 @@ import useToggleTimeout from "@/hooks/useToggleTimeout";
 
 export default function Notification({
     msg,
-    status,
+    type,
     open,
     onClose,
 }: {
     msg: string;
-    status: number | undefined;
+    type: string;
     open: boolean;
     onClose: () => void;
 }) {
@@ -24,7 +24,7 @@ export default function Notification({
     }
 
     const toggleNotification = useToggleTimeout(open);
-    const positiveStatus = useMemo(() => status! >= 200 && status! < 300, []);
+    const positiveStatus = useMemo(() => type === "success", []);
     useEffect(() => {
         if (!toggleNotification) {
             onClose();

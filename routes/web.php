@@ -17,6 +17,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [NoteController::class, 'show'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::post('/dashboard', [NoteController::class, 'store'])->middleware(['auth', 'verified'])->name('dashboard.store');
+Route::patch('/dashboard/{noteId}/', [NoteController::class, 'edit'])->middleware(['auth', 'verified'])->name('dashboard.edit');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

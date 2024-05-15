@@ -81,16 +81,53 @@ class NoteController extends Controller
                 'open' => false,
             ],
             'notes' => $notes,
-            'active_note' => 5,
+            'active_note' => null,
         ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Note $note)
+    public function edit(int $noteId, Request $request)
     {
-        //
+        $user = $request->user();
+        $note = Note::where('id', $noteId)->where('user_id', $user->id)->first();
+        if (! $note) {
+            $notes = Note::where('user_id', $user->id)->get(['note', 'updated_at', 'id', 'title']);
+
+            return Inertia::render('Dashboard', [
+                'notification' => [
+                    'type' => 'failed',
+                    'message' => 'Note does not belong to logged in user',
+                    'open' => true,
+                ],
+                'notes' => $notes,
+                'active_note' => null,
+            ]);
+        }
+
+        $validated = $request->validate([
+            'note' => 'required|array',
+            'title' => 'required|string',
+        ]);
+        error_log(json_encode($note));
+        error_log(json_encode($validated));
+        $note->update([
+            'note' => $validated['note'],
+            'title' => $validated['title'],
+        ]);
+
+        $notes = Note::where('user_id', $user->id)->get(['note', 'updated_at', 'id', 'title']);
+
+        return Inertia::render('Dashboard', [
+            'notification' => [
+                'type' => 'success',
+                'message' => 'Note Successfully Updated',
+                'open' => true,
+            ],
+            'notes' => $notes,
+            'active_note' => null,
+        ]);
     }
 
     /**

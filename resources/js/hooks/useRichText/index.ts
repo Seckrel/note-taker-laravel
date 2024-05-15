@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { API, OutputData } from "@editorjs/editorjs";
 import { INote } from "@/types";
 
@@ -30,6 +30,7 @@ export default function useRichText(
     notes: INote[]
 ) {
     const [note, setNote] = useState(INIT_DATA);
+    const editorRef = useRef(null);
     useEffect(() => {
         if (!activeNoteId) {
             setNote(INIT_DATA);
@@ -41,7 +42,7 @@ export default function useRichText(
                 setNote(INIT_DATA);
             }
         }
-    }, [activeNoteId, notes]);
+    }, [activeNoteId]);
     const updateNote = useCallback(
         async (
             {
@@ -62,5 +63,5 @@ export default function useRichText(
         []
     );
 
-    return { note, updateNote };
+    return { note, updateNote, editorRef };
 }
